@@ -1,0 +1,24 @@
+{% extends "posts/post_base.html" %}
+
+{% block prepost%}
+    <div>
+        {% if user.is_authenticated and user.posts.count != 0%}
+            {{user.username}} ==> <a href="{% url 'posts:for_user' username=user.username %}">Your posts...</a>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block post_content %}
+<div>
+	{% if posts.count == 0 %}
+	<h2>No posts yet!</h2>
+
+	{% else %}
+        <p>----------------------------------------------------------------------------------</p>
+		{% for post in post_list %}
+			{% include "posts/_post.html" %}
+            <p>----------------------------------------------------------------------------------</p>
+		{% endfor %}
+
+	{% endif %}
+</div>
+{% endblock %}

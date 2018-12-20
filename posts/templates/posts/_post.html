@@ -1,0 +1,10 @@
+<div>
+    <h1><a href='{% url 'posts:single' username=post.user.username pk=post.pk%}'>post</a>: {{ post.message }}</h1>
+    <h3>user: {{ post.user.username }}</h3> <h3>date: {{post.created_at}}</h3>
+</div>
+<div>
+    <p>Under construction.... liked ... not liked ... vidi construction.html</p>
+    {% if user.is_authenticated and post.user == user and not hide_delete %}
+        <a href="{% url 'posts:delete' pk=post.pk %}">Delete</a>
+    {% endif %}
+</div>

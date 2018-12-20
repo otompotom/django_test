@@ -1,0 +1,11 @@
+    {% if user in post.likes.all %}
+        Ako je user like-ovao ... info: Liked, ukupan broj like-ova i link za unlike
+        <a href="{% url 'posts:likes' pk=post.pk %}">Likes: {{post.likes.count}}</a>
+        <a href="{% url 'posts:unlike' pk=post.pk %}">Unlike</a>
+    {% else %}
+        ako user nije like-ovao ... ukupan broj like-ova, link za like
+        <a href="{% url 'posts:likes' pk=post.pk %}">Likes: {{post.likes.count}}</a>
+        <a href="{% url 'posts:like' pk=post.pk %}">Like</a>
+    {% endif %}
+
+

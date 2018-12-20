@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Social Network</title>
+</head>
+<body>
+
+    <nav role="navigation" id="navbar">
+    <div>
+        <a href="{% url 'home' %}">Social Network</a>
+
+        <ul>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'posts:all' %}">Posts</a></li>
+                <li><a href="{% url 'posts:create'%}">Create Post</a></li>
+                <li><a href="{% url 'accounts:logout' %}">Log out</a></li>
+            {% else %}
+                <li><a href="{% url 'accounts:login' %}">Log in</a></li>
+                <li><a href="{% url 'accounts:signup' %}">Sign up</a></li>
+            {% endif %}
+        </ul>
+
+    </div>
+    </nav>
+
+    <div>
+
+        {% block content %}
+
+        {% endblock %}
+
+    </div>
+
+</body>
+</html>
