@@ -12,7 +12,7 @@ class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     created_at = models.DateTimeField(auto_now=True)
     message = models.TextField()
-    # likes = models.ManyToManyField(User, through="PostsLiked")  # post.likes.count() bi trebalo da vrati broj lajkova
+    likes = models.ManyToManyField(User, through="PostsLiked")  # post.likes.count() bi trebalo da vrati broj lajkova
 
     def __str__(self):
         return self.message
@@ -24,6 +24,6 @@ class Post(models.Model):
         ordering = ["-created_at"]
         unique_together = ["user", "message"]
 
-# class PostsLiked(models.Model):
-#     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="like_users")
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_posts')
+class PostsLiked(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="like_users")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_posts')

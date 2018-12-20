@@ -9,7 +9,7 @@ urlpatterns = [
     path('by/<str:username>/<int:pk>', views.SinglePost.as_view(), name='single'),
     path('by/<str:username>/', views.UserPosts.as_view(), name = 'for_user'),
     path('delete/<int:pk>', views.DeletePost.as_view(), name='delete'),
-    path('like/<int:pk>', views.LikePost.as_view(), name='like'),
-    path('unlike/<int:pk>', views.UnlikePost.as_view(), name='unlike'),
+    path('like/<str:username>/<int:pk>', views.LikePost.as_view(), name='like'),
+    path('unlike/<str:username>/<int:pk>', views.UnlikePost.as_view(), name='unlike'),
 
 ]

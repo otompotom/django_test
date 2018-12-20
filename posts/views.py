@@ -2,10 +2,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from braces.views import SelectRelatedMixin
 from django.views import generic
 from django.urls import reverse_lazy, reverse
-from .models import Post  # PostsLiked
+from .models import Post, PostsLiked
 from django.contrib import messages
 
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -67,8 +68,45 @@ class UserPosts(generic.ListView):
 class LikePost(LoginRequiredMixin, generic.RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse("posts:single", kwargs={"username": self.kwargs.get("username"), "pk": self.kwargs.get("upk")})
+        return reverse("posts:single", kwargs={"username": self.kwargs.get("username"), "pk": self.kwargs.get("pk")})
+
+    def get(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, pk=self.kwargs.get("pk"))
+
+        try:
+            PostsLiked.objects.create(user=self.request.user, post=post)
+
+        except IntegrityError:
+            messages.warning(self.request, "AAAAAAAAAAAAAAAAAAAAA")
+
+        else:
+            messages.success(self.request, "You have successfully liked a post")
+
+        return super().get(request, *args, **kwargs)
+
 
 class UnlikePost(LoginRequiredMixin, generic.RedirectView):
+
     def get_redirect_url(self, *args, **kwargs):
-        return reverse("posts:single", kwargs={"username": self.kwargs.get("username"), "pk": self.kwargs.get("upk")})
+        return reverse("posts:single", kwargs={"username": self.kwargs.get("username"), "pk": self.kwargs.get("pk")})
+
+    def get(self, request, *args, **kwargs):
+
+        try:
+            post_liked_by_user_relationship = PostsLiked.objects.filter(
+                user=self.request.user,
+                post__pk=self.kwargs.get("pk")
+            ).get()
+
+        except PostsLiked.DoesNotExist:
+            messages.warning(
+                self.request,
+                "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+            )
+        else:
+            post_liked_by_user_relationship.delete()
+            messages.success(
+                self.request,
+                "You have successfully liked a post."
+            )
+        return super().get(request, *args, **kwargs)
