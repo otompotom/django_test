@@ -17,7 +17,6 @@ class CreatePost(LoginRequiredMixin, generic.CreateView):
     model = Post
     fields = ("message",)
 
-    # OVO BI TREBALO DA POVEZUJE USERA KOJI JE POSLAO REQUEST ZA KREIRANJE POSTA I SAM KREIRANI POST
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
@@ -32,7 +31,7 @@ class SinglePost(generic.DetailView):
 class ListPosts(generic.ListView):
     model = Post
 
-# VALJDA ZA BRISANJE POSTA?!?! VIDI CEMU SLUZI OVAJ SelectRelatedMixin!!!
+
 class DeletePost(LoginRequiredMixin, SelectRelatedMixin, generic.DeleteView):
     model = Post
     select_related = ("user",) # NE RADI KAD JE OVO ZAKOMENTARISANO ...
@@ -68,7 +67,8 @@ class UserPosts(generic.ListView):
 class LikePost(LoginRequiredMixin, generic.RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse("posts:single", kwargs={"username": self.kwargs.get("username"), "pk": self.kwargs.get("pk")})
+        # return reverse("posts:single", kwargs={"username": self.kwargs.get("username"), "pk": self.kwargs.get("pk")})
+        return reverse("posts:all")
 
     def get(self, request, *args, **kwargs):
         post = get_object_or_404(Post, pk=self.kwargs.get("pk"))
@@ -88,7 +88,8 @@ class LikePost(LoginRequiredMixin, generic.RedirectView):
 class UnlikePost(LoginRequiredMixin, generic.RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse("posts:single", kwargs={"username": self.kwargs.get("username"), "pk": self.kwargs.get("pk")})
+        # return reverse("posts:single", kwargs={"username": self.kwargs.get("username"), "pk": self.kwargs.get("pk")})
+        return reverse("posts:all")
 
     def get(self, request, *args, **kwargs):
 
